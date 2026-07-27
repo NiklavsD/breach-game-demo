@@ -57,7 +57,8 @@ const el = {
   feedbackButtons: [...document.querySelectorAll("[data-feedback]")]
 };
 
-const storedBalance = Number(localStorage.getItem("breach-demo-balance"));
+const storedBalanceRaw = localStorage.getItem("breach-demo-balance");
+const storedBalance = storedBalanceRaw === null ? Number.NaN : Number(storedBalanceRaw);
 const state = {
   mode: "shared",
   phase: "idle",
