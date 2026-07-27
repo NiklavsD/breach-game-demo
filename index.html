@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#dfe8f2">
+  <meta name="description" content="Playable concept demo for BREACH — a shared, asymmetric vault game.">
+  <title>BREACH — playable concept</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&family=League+Gothic&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <div class="blueprint-grid" aria-hidden="true"></div>
+  <header class="site-header">
+    <a class="wordmark" href="#" aria-label="BREACH home">
+      <span class="wordmark-mark" aria-hidden="true"></span>
+      <span>BREACH</span>
+      <small>FIELD TEST / 01</small>
+    </a>
+    <div class="test-balance" aria-label="Test credits balance">
+      <span>TEST CREDITS</span>
+      <strong id="balance">500</strong>
+      <button id="resetBalance" class="text-button" type="button">reset</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="intro" aria-labelledby="intro-title">
+      <div>
+        <p class="eyebrow">ONE VAULT. EVERYONE INSIDE.</p>
+        <h1 id="intro-title">Steal what you can.<br><em>Leave before it closes.</em></h1>
+      </div>
+      <p class="intro-copy">A playable idea test for a synchronized vault game. Pick a route, push deeper for a larger multiplier, or escape with what you have. No real money. No account.</p>
+    </section>
+
+    <nav class="mode-switcher" aria-label="Demo modes">
+      <button class="mode-button active" type="button" data-mode="shared">
+        <span class="mode-number">A</span>
+        <span><strong>Shared breach</strong><small>Move with the crowd</small></span>
+      </button>
+      <button class="mode-button" type="button" data-mode="practice">
+        <span class="mode-number">B</span>
+        <span><strong>Solo practice</strong><small>Learn the risk curve</small></span>
+      </button>
+      <button class="mode-button" type="button" data-mode="warden">
+        <span class="mode-number">C</span>
+        <span><strong>Warden seat</strong><small>Set the deep traps</small></span>
+      </button>
+    </nav>
+
+    <section class="game-shell" aria-label="Playable demo">
+      <aside class="game-brief">
+        <div>
+          <p class="panel-label" id="modeKicker">LIVE SHARED ROUND</p>
+          <h2 id="modeTitle">Get in. Read the room. Get out.</h2>
+          <p id="modeDescription">Everyone moves one row at the same time. Choose one of the outlined tiles above you, then decide whether the next multiplier is worth the risk.</p>
+        </div>
+
+        <div class="bet-panel" id="betPanel">
+          <span class="control-label">ENTRY</span>
+          <div class="chip-row" role="group" aria-label="Choose test credit entry">
+            <button class="chip active" type="button" data-bet="10">10</button>
+            <button class="chip" type="button" data-bet="25">25</button>
+            <button class="chip" type="button" data-bet="50">50</button>
+          </div>
+        </div>
+
+        <div class="warden-instructions" id="wardenInstructions" hidden>
+          <span class="control-label">YOUR LOADOUT</span>
+          <p>Place exactly 3 traps in the striped deep-vault rows. Maximum one trap per row. Then release the crowd.</p>
+          <div class="trap-counter"><strong id="trapCount">0</strong><span>/ 3 traps armed</span></div>
+        </div>
+
+        <div class="primary-actions">
+          <button class="primary-button" id="startButton" type="button">Enter with 10</button>
+          <button class="escape-button" id="escapeButton" type="button" disabled>Escape</button>
+        </div>
+
+        <div class="run-readout" aria-live="polite">
+          <div><span>POSITION</span><strong id="positionValue">OUTSIDE</strong></div>
+          <div><span>VALUE</span><strong id="payoutValue">10</strong></div>
+        </div>
+
+        <p class="microcopy" id="microcopy">Test credits exist only in this browser. The demo models the validated 91–92% naive RTP configuration.</p>
+      </aside>
+
+      <div class="vault-stage">
+        <div class="stage-topline">
+          <div class="round-id"><span id="roundStatusDot"></span><strong id="roundStatus">ROUND OPEN</strong></div>
+          <div id="crowdStatus">12 thieves waiting</div>
+        </div>
+
+        <div class="vault-frame" id="vaultFrame">
+          <div class="vault-door vault-door-left" aria-hidden="true"></div>
+          <div class="vault-door vault-door-right" aria-hidden="true"></div>
+          <div class="vault-board-wrap">
+            <div class="depth-labels" id="depthLabels" aria-hidden="true"></div>
+            <div class="vault-board" id="vaultBoard" role="grid" aria-label="Vault route grid"></div>
+          </div>
+          <div class="entry-line">
+            <span>STREET LEVEL</span>
+            <div class="player-token" id="entryToken" aria-label="Your thief"><span>YOU</span></div>
+          </div>
+        </div>
+
+        <div class="event-strip" id="eventStrip" aria-live="polite">
+          <span class="event-time">00:00</span>
+          <p>Select an entry and open the vault.</p>
+        </div>
+      </div>
+
+      <aside class="round-ledger">
+        <div>
+          <p class="panel-label">ROUND LEDGER</p>
+          <div class="ledger-list" id="ledgerList">
+            <div class="ledger-empty">The vault has not opened yet.</div>
+          </div>
+        </div>
+        <div class="rules-card">
+          <p class="panel-label">READ THE VAULT</p>
+          <ul>
+            <li><span class="legend-mark safe"></span>Clear tile</li>
+            <li><span class="legend-mark danger"></span>Triggered trap</li>
+            <li><span class="legend-mark route"></span>Your next move</li>
+          </ul>
+        </div>
+      </aside>
+    </section>
+
+    <section class="validation-strip" id="validationStrip" aria-labelledby="validation-title">
+      <div>
+        <p class="panel-label">CONCEPT PULSE</p>
+        <h2 id="validation-title">After one round: would you choose to go again?</h2>
+      </div>
+      <div class="pulse-actions" role="group" aria-label="Copy quick feedback">
+        <button type="button" data-feedback="Yes — I wanted one more run.">Yes, again</button>
+        <button type="button" data-feedback="Maybe — the tension worked, but the rules need work.">Maybe</button>
+        <button type="button" data-feedback="No — the core loop did not pull me in.">Not yet</button>
+      </div>
+      <p id="feedbackNote">A tap copies a one-line response you can paste back to the person who shared this demo.</p>
+    </section>
+  </main>
+
+  <footer>
+    <span>BREACH / INTERACTION PROTOTYPE</span>
+    <span>PLAY CREDITS ONLY · NO REAL-MONEY FUNCTION</span>
+  </footer>
+
+  <script src="./app.js"></script>
+</body>
+</html>
